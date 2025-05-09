@@ -21,7 +21,5 @@ public class IotDevice {
     private String name;
     private String username;
     private String password;
-    private String ip;
-    private String firmwareUpdateURL;
-    private String firmwareVersion;
+    private String ipAddress;
 }
