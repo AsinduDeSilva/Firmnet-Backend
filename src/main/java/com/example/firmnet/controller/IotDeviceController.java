@@ -2,6 +2,7 @@ package com.example.firmnet.controller;
 
 import com.example.firmnet.dto.CrudResponseDTO;
 import com.example.firmnet.dto.IotDeviceDTO;
+import com.example.firmnet.dto.IotMetricsDTO;
 import com.example.firmnet.service.IotDeviceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +39,8 @@ public class IotDeviceController {
     public ResponseEntity<CrudResponseDTO<IotDeviceDTO>> getIotDeviceById(@PathVariable Long id) {
         IotDeviceDTO device = iotDeviceService.findById(id);
 
-        if(device == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new CrudResponseDTO<>(false, "Device not found"));
-        }
-        return ResponseEntity.ok(new CrudResponseDTO<>(true, "Device found", device));
+        return device == null ? ResponseEntity.ok(new CrudResponseDTO<>(false, "Device not found"))
+                : ResponseEntity.ok(new CrudResponseDTO<>(true, "Device found", device));
 
     }
 
@@ -60,5 +57,11 @@ public class IotDeviceController {
     public ResponseEntity<CrudResponseDTO<IotDeviceDTO>> deleteIotDeviceById(@PathVariable Long id) {
         iotDeviceService.deleteIotDevice(id);
         return ResponseEntity.ok(new CrudResponseDTO<>(true, "Successfully deleted IoT device"));
+    }
+
+    @GetMapping("/{id}/metrics")
+    public ResponseEntity<CrudResponseDTO<?>> getIotDeviceMetrics(@PathVariable Long id) {
+        IotMetricsDTO metrics = iotDeviceService.getMetrics(id);
+        return ResponseEntity.ok(new CrudResponseDTO<>(true, "metrics", metrics));
     }
 }
