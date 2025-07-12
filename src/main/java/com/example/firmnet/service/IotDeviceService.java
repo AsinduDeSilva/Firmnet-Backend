@@ -36,7 +36,8 @@ public class IotDeviceService {
     }
 
     public IotDeviceDTO findById(Long id) {
-        return modelMapper.map(iotDeviceRepository.findById(id), IotDeviceDTO.class);
+        Optional<IotDevice> iotDevice = iotDeviceRepository.findById(id);
+        return iotDevice.map(device -> modelMapper.map(device, IotDeviceDTO.class)).orElse(null);
     }
 
     public void deleteIotDevice(Long id) {
@@ -45,11 +46,12 @@ public class IotDeviceService {
 
     public boolean updateIotDevice(Long id, IotDeviceDTO iotDeviceDTO) {
         Optional<IotDevice> iotDevice = iotDeviceRepository.findById(id);
-        if(iotDevice.isPresent()) {
+        if (iotDevice.isPresent()) {
             IotDevice iotDevice1 = iotDevice.get();
             iotDevice1.setName(iotDeviceDTO.getName());
             iotDevice1.setUsername(iotDeviceDTO.getUsername());
             iotDevice1.setPassword(iotDeviceDTO.getPassword());
+            iotDevice1.setIpAddress(iotDeviceDTO.getIpAddress());
 
             iotDeviceRepository.save(iotDevice1);
             return true;
