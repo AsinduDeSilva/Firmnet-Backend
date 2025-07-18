@@ -11,15 +11,21 @@ public class FlowService {
 
     private final WebClient webClient;
 
-    @Value("${sdn-controller.socket}")
-    private String sdnControllerSocket;
+    @Value("${sdn.controller.ip}")
+    private String sdnControllerIp;
+
+    @Value("${sdn.controller.port}")
+    private String sdnControllerPort;
+
+    private final String sdnControllerUrl;
 
     public FlowService(WebClient webClient) {
         this.webClient = webClient;
+        this.sdnControllerUrl = String.format("http://%s:%s", sdnControllerIp, sdnControllerPort);
     }
 
     public ControllerResponseDTO addFlow(FlowDTO flowDTO) {
-        return webClient.post().uri(sdnControllerSocket + "/flow/add")
+        return webClient.post().uri(sdnControllerUrl + "/flow/add")
                 .bodyValue(flowDTO)
                 .retrieve()
                 .bodyToMono(ControllerResponseDTO.class)
@@ -27,7 +33,7 @@ public class FlowService {
     }
 
     public ControllerResponseDTO deleteFlow(FlowDTO flowDTO) {
-        return webClient.post().uri(sdnControllerSocket + "/flow/delete")
+        return webClient.post().uri(sdnControllerUrl + "/flow/delete")
                 .bodyValue(flowDTO)
                 .retrieve()
                 .bodyToMono(ControllerResponseDTO.class)
@@ -35,14 +41,14 @@ public class FlowService {
     }
 
     public ControllerResponseDTO enableFlooding() {
-        return webClient.post().uri(sdnControllerSocket + "/flood/enable")
+        return webClient.post().uri(sdnControllerUrl + "/flood/enable")
                 .retrieve()
                 .bodyToMono(ControllerResponseDTO.class)
                 .block();
     }
 
     public ControllerResponseDTO disableFlooding() {
-        return webClient.post().uri(sdnControllerSocket + "/flood/disable")
+        return webClient.post().uri(sdnControllerUrl + "/flood/disable")
                 .retrieve()
                 .bodyToMono(ControllerResponseDTO.class)
                 .block();
