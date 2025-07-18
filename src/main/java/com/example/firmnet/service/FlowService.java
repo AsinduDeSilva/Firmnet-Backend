@@ -10,16 +10,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class FlowService {
 
     private final WebClient webClient;
-
-    @Value("${sdn.controller.ip}")
-    private String sdnControllerIp;
-
-    @Value("${sdn.controller.port}")
-    private String sdnControllerPort;
-
     private final String sdnControllerUrl;
 
-    public FlowService(WebClient webClient) {
+    public FlowService(WebClient webClient,
+                       @Value("${sdn.controller.ip}") String sdnControllerIp,
+                       @Value("${sdn.controller.port}") String sdnControllerPort) {
+
         this.webClient = webClient;
         this.sdnControllerUrl = String.format("http://%s:%s", sdnControllerIp, sdnControllerPort);
     }
