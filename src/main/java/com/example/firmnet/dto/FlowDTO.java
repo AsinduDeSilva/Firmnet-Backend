@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class FlowDTO {
     String src_ip;
     String dst_ip;
-    int dpid;
+    Long dpid;
 }
